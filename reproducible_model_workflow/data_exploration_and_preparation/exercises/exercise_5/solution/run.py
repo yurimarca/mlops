@@ -1,11 +1,11 @@
 #!/usr/bin/env python
 import argparse
 import logging
-import seaborn as sns
+import os
+
 import pandas as pd
 import wandb
 
-from sklearn.manifold import TSNE
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)-15s %(message)s")
 logger = logging.getLogger()
@@ -13,51 +13,45 @@ logger = logging.getLogger()
 
 def go(args):
 
-    run = wandb.init(job_type="process_data")
+    run = wandb.init(project="exercise_5", job_type="process_data")
 
     logger.info("Downloading artifact")
     artifact = run.use_artifact(args.input_artifact)
     artifact_path = artifact.file()
 
-    iris = pd.read_csv(
-        artifact_path,
-        skiprows=1,
-        names=("sepal_length", "sepal_width", "petal_length", "petal_width", "target"),
-    )
+    df = pd.read_parquet(artifact_path)
 
-    target_names = "setosa,versicolor,virginica".split(",")
-    iris["target"] = [target_names[k] for k in iris["target"]]
+    # Drop the duplicates
+    logger.info("Dropping duplicates")
+    df = df.drop_duplicates().reset_index(drop=True)
 
-    logger.info("Performing t-SNE")
-    tsne = TSNE(n_components=2, init="pca", random_state=0)
-    transf = tsne.fit_transform(iris.iloc[:, :4])
+    logger.info("Fixing missing values")
+    # These are missing values that are due to an old version of the data. On new data,
+    # because of a change in the web form used to register new songs, the title and the
+    # song name are already empty strings
+    df['title'].fillna(value='', inplace=True)
+    df['song_name'].fillna(value='', inplace=True)
+    df['text_feature'] = df['title'] + ' ' + df['song_name']
 
-    iris["tsne_1"] = transf[:, 0]
-    iris["tsne_2"] = transf[:, 1]
-
-    g = sns.displot(iris, x="tsne_1", y="tsne_2", hue="target", kind="kde")
-
-    logger.info("Uploading image to W&B")
-    run.log({"t-SNE": wandb.Image(g.fig)})
-
-    logger.info("Creating artifact")
-
-    iris.to_csv("clean_data.csv")
+    filename = "processed_data.csv"
+    df.to_csv(filename)
 
     artifact = wandb.Artifact(
         name=args.artifact_name,
         type=args.artifact_type,
         description=args.artifact_description,
     )
-    artifact.add_file("clean_data.csv")
+    artifact.add_file(filename)
 
     logger.info("Logging artifact")
     run.log_artifact(artifact)
 
+    os.remove(filename)
+
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(
-        description="Download a file and upload it as an artifact to W&B",
+        description="Preprocess a dataset",
         fromfile_prefix_chars="@",
     )
 
