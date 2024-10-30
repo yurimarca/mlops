@@ -3,4 +3,10 @@ channels:
   - conda-forge
   - defaults
 dependencies:
-  # Complete HERE
+  - requests
+  - pip
+  - mlflow
+  - hydra-core
+  - pip:
+    - wandb
+
