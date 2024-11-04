@@ -43,10 +43,6 @@ def import_data(pth):
         return df
     except FileNotFoundError:
         print(f"File not found: {pth}")
-    except pd.errors.EmptyDataError:
-        print("No data: the file is empty.")
-    except pd.errors.ParserError:
-        print("Error parsing the file.")
     except Exception as e:
         print(f"An unexpected error occurred: {e}")
 
@@ -70,7 +66,6 @@ def perform_eda(df, img_folder='./images/eda'):
 
     # Create Churn variable
     df['Churn'] = df['Attrition_Flag'].apply(lambda val: 0 if val == "Existing Customer" else 1)
-
 
     # Plot and save churn distribution
     fig = plt.figure(figsize=(20,10)) 
@@ -120,11 +115,12 @@ def encoder_helper(df, category_lst, response='Churn'):
 
     for category in category_lst:
         if category in df.columns:
-            cat_groups = df.groupby(category)[response].mean().to_dict()
+            cat_groups = df.groupby(category)[response].mean()
             new_column = category + "_" + response
-            df[new_column] = df[category].map(lambda x: cat_groups.get(x, 0))
+            df[new_column] = df[category].map(lambda x: cat_groups[x])
         else:
             print(f"Warning: {category} column not found in dataframe.")
+
     return df
 
 
