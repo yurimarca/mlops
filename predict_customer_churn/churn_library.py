@@ -39,7 +39,7 @@ def import_data(pth):
             df: pandas dataframe
     '''
     try:
-        df = pd.read_csv(pth)
+        df = pd.read_csv(pth, index_col=0)
         return df
     except FileNotFoundError:
         print(f"File not found: {pth}")
@@ -124,7 +124,7 @@ def encoder_helper(df, category_lst, response='Churn'):
     return df
 
 
-def perform_feature_engineering(df, response):
+def perform_feature_engineering(df, response='Churn'):
     '''
     input:
               df: pandas dataframe
@@ -136,12 +136,15 @@ def perform_feature_engineering(df, response):
               y_train: y training data
               y_test: y testing data
     '''
-    # Collect categorical features to be encoded
-    cat_columns = df.select_dtypes(include='object').columns.tolist()
+    keep_cols = ['Customer_Age', 'Dependent_count', 'Months_on_book',
+                 'Total_Relationship_Count', 'Months_Inactive_12_mon',
+                 'Contacts_Count_12_mon', 'Credit_Limit', 'Total_Revolving_Bal',
+                 'Avg_Open_To_Buy', 'Total_Amt_Chng_Q4_Q1', 'Total_Trans_Amt',
+                 'Total_Trans_Ct', 'Total_Ct_Chng_Q4_Q1', 'Avg_Utilization_Ratio',
+                 'Gender_Churn', 'Education_Level_Churn', 'Marital_Status_Churn', 
+                 'Income_Category_Churn', 'Card_Category_Churn', 'Churn']
 
-    # Encode categorical features using mean of response variable on category
-    df = encoder_helper(df, cat_columns, response='Churn')
-
+    df = df[keep_cols]
     y = df[response]
     X = df.drop(response, axis=1)
 
@@ -173,38 +176,58 @@ def classification_report_image(y_train,
              None
     '''
     # RandomForestClassifier 
+    plt.figure(figsize=(6, 6))
     plt.rc('figure', figsize=(6, 6))
+
+    # Add texts for classification report
     plt.text(0.01, 1.25,
-             str('Random Forest Train'),
+             'Random Forest Train',
              {'fontsize': 10}, fontproperties='monospace')
     plt.text(0.01, 0.05,
-             str(classification_report(y_test, y_test_preds_rf)),
+             classification_report(y_test, y_test_preds_rf),
              {'fontsize': 10}, fontproperties='monospace')
     plt.text(0.01, 0.6,
-             str('Random Forest Test'),
+             'Random Forest Test',
              {'fontsize': 10}, fontproperties='monospace')
     plt.text(0.01, 0.7,
-             str(classification_report(y_train, y_train_preds_rf)),
+             classification_report(y_train, y_train_preds_rf),
              {'fontsize': 10}, fontproperties='monospace')
+
+    # Remove axes
     plt.axis('off')
+
+    # Save the figure to a file
     plt.savefig(fname='./images/results/rf_results.png')
 
+    # Close the figure
+    plt.close()
+    
     # LogisticRegression 
+    plt.figure(figsize=(6, 6))
     plt.rc('figure', figsize=(6, 6))
+
+    # Add texts for classification report
     plt.text(0.01, 1.25,
-             str('Logistic Regression Train'),
+             'Logistic Regression Train',
              {'fontsize': 10}, fontproperties='monospace')
     plt.text(0.01, 0.05,
-             str(classification_report(y_train, y_train_preds_lr)),
+             classification_report(y_train, y_train_preds_lr),
              {'fontsize': 10}, fontproperties='monospace')
     plt.text(0.01, 0.6,
-             str('Logistic Regression Test'),
+             'Logistic Regression Test',
              {'fontsize': 10}, fontproperties='monospace')
     plt.text(0.01, 0.7,
-             str(classification_report(y_test, y_test_preds_lr)),
+             classification_report(y_test, y_test_preds_lr),
              {'fontsize': 10}, fontproperties='monospace')
+
+    # Remove axes
     plt.axis('off')
+
+    # Save the figure to a file
     plt.savefig(fname='./images/results/logistic_results.png')
+
+    # Close the figure
+    plt.close()
 
 
 def feature_importance_plot(model, X_data, output_pth):
@@ -227,21 +250,24 @@ def feature_importance_plot(model, X_data, output_pth):
     # Sorted feature importances
     names = [features.columns[i] for i in indices]
 
-    # Create plot
+    # Initialize a new figure
     plt.figure(figsize=(25, 15))
 
-    # Create plot title
+    # Create plot title and labels
     plt.title("Feature Importance")
     plt.ylabel('Importance')
 
     # Add bars
     plt.bar(range(features.shape[1]), importances[indices])
 
-    # x-axis labels
+    # Set x-axis labels
     plt.xticks(range(features.shape[1]), names, rotation=90)
 
-    # Save the image
+    # Save the image to a file
     plt.savefig(fname=output_pth + 'feature_importances.png')
+
+    # Close the figure
+    plt.close()
 
 def train_models(X_train, X_test, y_train, y_test):
     '''
@@ -309,7 +335,9 @@ if __name__ == "__main__":
     perform_eda(DF)
     
     # feature engineering
-    category_list = [ 'Gender', 'Education_Level', 'Marital_Status','Income_Category', 'Card_Category'  ]
+    category_list = [ 'Gender', 'Education_Level', 
+                      'Marital_Status','Income_Category', 
+                      'Card_Category']
     DF = encoder_helper(DF, category_list)
 
     print(DF.head())
