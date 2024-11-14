@@ -260,6 +260,7 @@ class ChurnLibrarySolution:
         plt.ylabel('Importance')
         plt.bar(range(features_test.shape[1]), importances[indices])
         plt.xticks(range(features_test.shape[1]), names, rotation=90)
+        plt.tight_layout()
 
         # Save the image to a file
         fig.savefig(self.img_res_folder / 'feature_importances.png')
