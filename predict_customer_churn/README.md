@@ -4,7 +4,6 @@ This project, part of the ML DevOps Engineer Nanodegree from Udacity, focuses on
 
 ## Project Structure
 
-- **README.md**: Project overview and instructions.
 - **requirements.txt**: List of dependencies to set up the environment.
 - **churn_notebook.ipynb**: Jupyter notebook for exploratory data analysis and model development.
 - **churn_library.py**: Main library with functions for data processing, feature engineering, model training, and evaluation.
@@ -25,6 +24,9 @@ This project, part of the ML DevOps Engineer Nanodegree from Udacity, focuses on
 ## Usage
 
 - **churn_library.py**: This script contains the main functions for data processing, training, and evaluation.
+```bash
+python churn_library.py
+```
 - **churn_script_logging_and_tests.py**: Execute this script to perform logging and testing of `churn_library.py` functions:
 ```bash
 python churn_script_logging_and_tests.py
@@ -45,6 +47,3 @@ python churn_script_logging_and_tests.py
 - **Code Quality:** Both `churn_library.py` and `churn_script_logging_and_tests.py` achieved a perfect score in pylint, ensuring high code quality and adherence to Python's coding standards.
 
 
-## Acknowledgments
-
-This project was completed as part of the ML DevOps Engineer Nanodegree from Udacity.
