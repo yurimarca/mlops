@@ -1,0 +1,12 @@
+name: exercise_3
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - requests
+  - pip
+  - mlflow
+  - hydra-core
+  - pip:
+    - wandb
+
