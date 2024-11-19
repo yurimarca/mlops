@@ -5,6 +5,9 @@ import seaborn as sns
 import pandas as pd
 import wandb
 
+import matplotlib
+matplotlib.use('Agg')
+
 from sklearn.manifold import TSNE
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)-15s %(message)s")
