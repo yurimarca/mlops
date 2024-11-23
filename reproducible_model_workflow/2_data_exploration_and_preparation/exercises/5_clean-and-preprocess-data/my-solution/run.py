@@ -14,7 +14,32 @@ def go(args):
     run = wandb.init(project="exercise_5", job_type="process_data")
 
     ## YOUR CODE HERE
-    pass
+    logger.info("Fetching artifact")
+    artifact = run.use_artifact(args.input_artifact)
+    local_path = artifact.file()
+    
+    logger.info("Read artifact")
+    df = pd.read_parquet(local_path)
+    
+    logger.info("Start pre-processing")
+    df = df.drop_duplicates().reset_index(drop=True)
+    
+    # Feature engineering should be also done in inference time!
+    df['title'].fillna(value='', inplace=True)
+    df['song_name'].fillna(value='', inplace=True)
+    df['text_feature'] = df['title'] + ' ' + df['song_name']
+    
+    out_file = args.artifact_name
+    df.to_csv(out_file)
+    artifact = wandb.Artifact(
+                    name=args.artifact_name,
+                    type=args.artifact_type,
+                    description=args.artifact_description
+                    )
+    artifact.add_file(out_file)
+    
+    run.log_artifact(artifact)
+    
 
 
 if __name__ == "__main__":
