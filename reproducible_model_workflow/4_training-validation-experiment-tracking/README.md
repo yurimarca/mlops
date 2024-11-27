@@ -10,11 +10,11 @@ Using an inference pipeline and an inference artifact helps us achieve developme
 
 So, summarizing, this is what an inference artifact looks like:
 
-![Inference Artifact](figures/inference_artifact.png)
+![Inference Artifact](./figures/inference-artifact.png)
 
 ## Write a Training/Inference Sub-Pipeline
 
-![Inference Pipeline](./figures/inference_pipeline.png)
+![Inference Pipeline](./figures/inference-pipeline.png)
 
 It is a sequence of Transformers, which receive the input and transform it in some way, followed by a model that receives the transformed input and returns an output (a classification or a regression prediction). The term transformers here has nothing to do with the transformers widely used in NLP modeling. Instead, transformers are objects that transform the input data, for example by encoding categorical features or renormalizing numerical features.
 
