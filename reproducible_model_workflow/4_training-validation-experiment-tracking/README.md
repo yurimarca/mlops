@@ -74,4 +74,9 @@ Two demonstrations are presented:
 1. ColumnTransformer in `demo/sklearn_pipeline/`
 2. Inference Pipeline with PyTorch in `demo/pytorch/`
 
+## Machine Learning Experimentation
 
+**Version our data, Version our code, Track every experiment**. 
+With these 3 key steps in place, we can perform experimentation following this process:
+
+![experiment](./figures/experiments.png)

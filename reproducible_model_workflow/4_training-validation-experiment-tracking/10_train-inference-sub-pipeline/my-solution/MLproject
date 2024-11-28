@@ -1,4 +1,4 @@
-name: download_data
+name: train_inference
 conda_env: conda.yml
 
 entry_points:
