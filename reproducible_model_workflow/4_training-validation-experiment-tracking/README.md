@@ -151,3 +151,26 @@ score = roc_auc_score(y_test, pred_proba, average="macro", multi_class="ovo")
 run.summary["AUC"] = score
 ```
 
+## Using MLflow for Experiment Tracking
+
+MLflow provides MLflow tracking that accomplishes a similar function as the experiment tracking capability of W&B. 
+It can track artifacts, code and experiments. 
+The way artifacts are tracked though is pretty different than W&B, and more primitive. 
+You can find a description on how to use this functionality ![here](https://www.mlflow.org/docs/latest/tracking.html). 
+Tracking experiments is very similar to what W&B does:
+
+```python
+experiment_id = mlflow.create_experiment("experiment 1")
+
+with mlflow.run() as run:
+  # Log an hyper parameter
+  run.log_param("param1", 100)
+
+  # Log a metric
+  for i in range(10):
+    run.log_metric("foo", i)
+
+  # Log an artifact
+  path_to_my_artifact = "./my_artifact.csv"
+  run.log_artifacts(path_to_my_artifact)
+```
