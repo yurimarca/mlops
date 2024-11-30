@@ -156,7 +156,7 @@ run.summary["AUC"] = score
 MLflow provides MLflow tracking that accomplishes a similar function as the experiment tracking capability of W&B. 
 It can track artifacts, code and experiments. 
 The way artifacts are tracked though is pretty different than W&B, and more primitive. 
-You can find a description on how to use this functionality ![here](https://www.mlflow.org/docs/latest/tracking.html). 
+You can find a description on how to use this functionality [here](https://www.mlflow.org/docs/latest/tracking.html). 
 Tracking experiments is very similar to what W&B does:
 
 ```python
