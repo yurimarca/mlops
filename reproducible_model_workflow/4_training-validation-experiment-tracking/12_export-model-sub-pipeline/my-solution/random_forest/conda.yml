@@ -1,0 +1,22 @@
+name: exercise_12
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - python=3.9
+  - pandas
+  - requests
+  - pip
+  - hydra-core
+  - mlflow
+  - scikit-learn
+  - matplotlib
+  - plotly
+  - pillow
+  - pyyaml
+  - pip:
+      - wandb
+      - omegaconf
+      - hydra-joblib-launcher
+      - databricks_cli
+      - protobuf==3.20.3

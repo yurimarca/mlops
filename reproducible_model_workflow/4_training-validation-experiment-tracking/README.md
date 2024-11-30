@@ -125,3 +125,29 @@ artifact = wandb.Artifact(...)
 artifact.add_dir(export_path)
 run.log_artifact(artifact)
 ```
+
+## Test Your Final Artifact and Mark for Production
+
+We evaluate the inference artifact against the test dataset after export, i.e., we load the exported inference artifact in a different component (the test component) and we evaluate its performances. 
+We do this so we are testing exactly what will be used in production.
+
+Thus, within the component evaluating the inference artifact we can do:
+
+```python
+model_export_path = run.use_artifact(args.model_export).download()
+
+pipe = mlflow.sklearn.load_model(model_export_path)
+```
+
+to load the inference artifact. 
+Note that the model export artifact (aka the inference artifact) contains several files, so we need the path to the directory containing the files. 
+Therefore, we use `.download()` and not `file()` as we did so far.
+
+Once we have reloaded our pipeline, we can test it as usual, for example computing the ROC metric:
+
+```python
+pred_proba = pipe.predict_proba(X_test)
+score = roc_auc_score(y_test, pred_proba, average="macro", multi_class="ovo")
+run.summary["AUC"] = score
+```
+
