@@ -1,0 +1,20 @@
+name: download_data
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - python
+  - pandas
+  - requests
+  - pip
+  - hydra-core=
+  - mlflow
+  - scikit-learn
+  - matplotlib
+  - plotly
+  - pillow
+  - pip:
+      - wandb
+      - omegaconf
+      - protobuf==3.20.3
+      - databricks_cli

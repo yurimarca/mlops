@@ -80,3 +80,48 @@ Two demonstrations are presented:
 With these 3 key steps in place, we can perform experimentation following this process:
 
 ![experiment](./figures/experiments.png)
+
+## Export Your Model Sub-Pipeline
+
+Exporting means packaging our inference pipeline into a format that can be saved to disk and reused by downstream tasks, for example our production environment.
+
+We can export our inference pipeline/model using mlflow. MLflow provides a standard format for model exports that is accepted by many downstream tools. Each export can contain multiple flavors for the same model. A flavor is a particular subformat for the model. A downstream tools could support some flavors but not others. Of course, the exported artifact can also be re-read by mlflow. Finally, the export contains also all the information to recreate the environment for the model with all the right versions of all the dependencies.
+
+MLflow provides several flavors(opens in a new tab) out of the box, and can natively export models from sklearn, pytorch, Keras, ONNX and also a generic python function flavor that can be used for custom things.
+
+When generating the model export we can provide two optional but important elements:
+
+1. A signature, which contains the input and output schema for the data. This allows downstream tools to catch obvious schema problems.
+2. Some input examples: these are invaluable for testing that everything works in downstream task
+
+Normally MLflow figures out automatically the environment that the model need to work appropriately. However, this environment can also be explicitly controlled(opens in a new tab). Finally, the exported model can be easily converted(opens in a new tab) to a Docker image that provides a REST API for the model.
+
+```python
+from sklearn.pipeline import Pipeline
+import mlflow.sklearn
+from mlflow.models import infer_signature
+
+# Define and fit pipeline
+pipe = Pipeline(...)
+pipe.fit(X_train, y_train)
+pred = pipe.predict(X_test)
+
+signature = infer_signature(X_test, pred)
+
+# Get signature and export inference artifact
+export_path = "model_dir"
+
+mlflow.sklearn.save_model(
+  pipe,  # our pipeline
+  export_path,  # Path to a directory for the produced package
+  signature=signature, # input and output schema
+  input_example=X_test.iloc[:5]  # the first few examples
+)
+
+artifact = wandb.Artifact(...)
+# NOTE that we use .add_dir and not .add_file
+# because the export directory contains several
+# files
+artifact.add_dir(export_path)
+run.log_artifact(artifact)
+```

@@ -1,0 +1,17 @@
+name: download_data
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - python
+  - requests
+  - pip
+  - mlflow
+  - hydra-core
+  - scikit-learn
+  - pandas
+  - pip:
+      - wandb
+      - hydra-joblib-launcher
+      - databricks_cli
+      - protobuf==3.20.3
