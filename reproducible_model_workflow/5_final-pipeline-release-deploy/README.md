@@ -72,3 +72,10 @@ results = requests.post("http://localhost:5000/invocations", json=data)
    
 print(results.json())
 ```
+
+## Other Options for Deployment
+
+Inference artifacts in the "MLflow models" format can be used with several tools beyond MLflow itself. Some examples are:
+
+- Spark for offline inference (see the mlflow documentation)
+- Online inference with Seldon Core, Algorithmia, and any tool that supports pure-python inference functions (like BentoML, cnvrg.io, valohai, clearML, and more). You can also dockerize your MLflow API and deploy it directly as a REST API, such as in Kubernetes.
