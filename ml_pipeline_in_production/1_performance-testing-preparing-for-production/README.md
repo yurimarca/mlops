@@ -40,6 +40,59 @@ The same slices that you monitor pre-deployment should also be monitored post-de
 While it's beyond the scope of this course, there is a growing field of "slice-based learning" (linked in the further reading). Understanding how your model performs on a more granular level can potentially open opportunities for further model developments.
 
 
+### Demo Code
+
+**foo.py**
+```py
+def foo():
+    return "Hello world!"
+```
+
+**test_foo.py**
+```py
+from .foo import foo
+
+def test_foo():
+    foo_result = foo()
+
+    expected_foo_result = "Hello world!"
+    assert foo_result == expected_foo_result
+```
+
+**test_slice.py**
+```py
+import pandas as pd
+import pytest
 
 
+@pytest.fixture
+def data():
+    """ Simple function to generate some fake Pandas data."""
+    df = pd.DataFrame(
+        {
+            "id": [1, 2, 3],
+            "numeric_feat": [3.14, 2.72, 1.62],
+            "categorical_feat": ["dog", "dog", "cat"],
+        }
+    )
+    return df
+
+
+def test_data_shape(data):
+    """ If your data is assumed to have no null values then this is a valid test. """
+    assert data.shape == data.dropna().shape, "Dropping null changes shape."
+
+
+def test_slice_averages(data):
+    """ Test to see if our mean per categorical slice is in the range 1.5 to 2.5."""
+    for cat_feat in data["categorical_feat"].unique():
+        avg_value = data[data["categorical_feat"] == cat_feat]["numeric_feat"].mean()
+        assert (
+            2.5 > avg_value > 1.5
+        ), f"For {cat_feat}, average of {avg_value} not between 2.5 and 3.5."
+
+```
+
+
+> Exercise 1 - Data Slicing
 
