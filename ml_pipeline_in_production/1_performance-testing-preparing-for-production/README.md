@@ -168,6 +168,8 @@ Google's [general documentation](https://modelcards.withgoogle.com/about) on mod
 
 ## Model Card exercise
 
+- Example from previous Execise 2:
+
 ### Model Details
 Justin C Smith created the model. It is logistic regression using the default hyperparameters in scikit-learn 0.24.2.
 
