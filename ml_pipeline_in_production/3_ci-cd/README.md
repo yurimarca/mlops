@@ -125,3 +125,204 @@ Other popular platforms for CI/CD include CircleCI, TravisCI, and Jenkins.
 - GitHub's [overview](https://docs.github.com/en/actions) on Actions.
 - GitHub's [docs](https://github.com/features/actions) on Actions.
 - A [repository](https://github.com/actions/starter-workflows) of GitHub's starter workflows.
+
+## Setting up GitHub Actions
+
+The first action is the Python Application Action. This Action installs Python and the requirements for your application (if there are any). Lastly it runs flake8 and pytest -- the build fails if either a test fails or certain flake8 errors are hit.
+
+In principle, one should run flake8 and pytest before you commit your code since that can be faster than waiting on the automated build process but this piece of automation ensures any contributors to the code also pass flake8 and pytest and they get checked in case you don't run them yourself. It also ensures that both of these pass when the code is built in a clean environment.
+
+python-app.yaml
+```yaml
+# This workflow will install Python dependencies, run tests and lint with a single version of Python
+# For more information see: https://help.github.com/actions/language-and-framework-guides/using-python-with-github-actions
+
+name: Python application
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Python 3.9
+      uses: actions/setup-python@v2
+      with:
+        python-version: 3.9
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install flake8 pytest
+        if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+    - name: Lint with flake8
+      run: |
+        # stop the build if there are Python syntax errors or undefined names
+        flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
+        # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
+        flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
+    - name: Test with pytest
+      run: |
+        pytest
+```
+
+The second Action is a scheduled job that uses a Unix time-based job scheduler called cron. This Action simply marks issues and pull requests as stale if they have no activity. If you go to stale.yaml's repo then you will see that there are many more options than shown in the default YAML file.
+
+This Action is particularly useful for large projects, e.g. open-source projects, since it helps with the maintenance of issues and pull requests. It makes it easier to track what is current or not, and what may need attention without manually combing through the issues and pull requests.
+
+**stale.yaml**
+```yaml
+name: Mark stale issues and pull requests
+
+on:
+  schedule:
+  - cron: "30 1  *** "
+
+jobs:
+  stale:
+
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+      pull-requests: write
+
+    steps:
+    - uses: actions/stale@v3
+      with:
+        repo-token: ${{ secrets.GITHUB_TOKEN }}
+        stale-issue-message: 'Stale issue message'
+        stale-pr-message: 'Stale pull request message'
+        stale-issue-label: 'no-issue-activity'
+        stale-pr-label: 'no-pr-activity'
+```
+
+## Introduction to Heroku
+
+Heroku is a cloud Platform-as-a-Service (PaaS) that supports various languages and allows users to deploy apps. For our purposes, we will use Heroku to run a Python application that consists of an API for machine learning inference.
+
+Heroku is built around lightweight containers called dynos that are easily scalable and adaptable to various tasks. For our work, we will be using one web dyno to run our API.
+
+The instructions for launching an app are contained in a Procfile that resides in the highest level of your project directory. This file declares the dyno type and the associated command on each line, e.g.:
+
+```
+web: uvicorn main:app
+```
+
+This Procfile specifies a web dyno that runs the command uvicorn which is then running a web app cleverly called app that resides in main.py.
+
+#### Further Reading
+- Heroku's [https://devcenter.heroku.com/articles/getting-started-with-python](documentation )on getting started with Python.
+- Heroku's [https://devcenter.heroku.com/articles/dynos](documentation) on dynos.
+
+### Continuous Deployment with Heroku
+
+Heroku makes it easy to do CD. It provides** **multiple different deployment options with the two most common being Git and Docker based deployments. We will leverage the GitHub connection.
+
+You can connect an existing repository to Heroku either using the web GUI or the CLI and from there you can enable continuous delivery so that all changes to your code automatically get deployed to your Heroku app. Furthermore, you can specify that the CD only occurs when your continuous integration (e.g. your unit tests) succeeds. Doing this tightly couples our CI and CD processes which will help us avoid deploying a broken app.
+
+When creating apps on Heroku, it's important to think of your slug and its limitations. The slug is your app and all of its dependencies, and it has a size limit of 500 MB. For light use cases all of your code, model, and even data could fit within that limit. However large models or frameworks (such as TensorFlow 2) can easily exceed the limit. Where possible, trim what is included in your slug using a .slugignore file, and in our case, we can leverage our remote DVC storage to contain our model and data and access them in our app when we need them.
+
+## Deployment to Render Cloud Platform
+
+[https://render.com/](Render) is a unified cloud platform to build and run apps and websites. Render provides all services in one place, including web services, static sites, background workers, cron jobs, Dockerfiles, private services, PostgreSQL, and Redis.
+
+> Render is an alternative tp Heroku that provides free-tier services for small projects and hobbyists.
+
+Here's how to deploy a Flask app and Postgres database on Render Console:
+
+1. Create a Render account
+1. Set up a Database Service with Postgres
+1. Deploy a Flask app with Render's Web Service
+
+We'll go through each step in detail.
+
+Before you get started, make sure to download or clone the Flask app example for the exercise below from the [https://github.com/udacity/render-cloud-example](Udacity | Render Cloud Example repo).
+
+> ⚠️ After you complete this exercise, please suspend or delete the services to avoid any charges.
+
+#### Step 1: Create a Render Account
+
+From the Render.com landing page, click the "Get Started" button to open the sign-up page. You can create an account by linking your GitHub, GitLab, or Google account or provide your email and password.
+
+![2-create-new-account.jpeg](figs/2-create-new-account.jpeg)
+
+#### Step 2: Set up a Database Service with Postgres
+
+Once you are logged in, you will be redirected to the Render Dashboard. Click the New PostgreSQL button to set up a Postgres cloud database.
+
+![3-setup-postgres.png](figs/3-setup-postgres.png)
+
+On the **New Postgres** page:
+
+1. Enter a name for the new database service: postgres-deployment-example
+1. Select an instance type: Free
+1. Click Create Database button
+
+![32-create-database.png](figs/32-create-database.png)
+
+#### Step 3: Deploy Apps with Render's Web Service
+
+Once the database is set up, we can return to Render Dashboard and create a new Web Service.
+
+![44-create-web-service.png](figs/4-create-web-service.png)
+
+![5-connect-to-gh-repo.png](figs/5-connect-to-gh-repo.png)
+
+On the **New Web Service** page:
+1. Provide a name for the new database service: render-deployment-example
+1. Select an instance type: Free
+1. Enter the build command: `pip install -r requirements.txt`
+
+**Note:** Render will install the dependencies from the requirements.txt in the GitHub repo.
+
+![6-name-the-web-service.png](figs/6-name-the-web-service.png)
+
+#### Connect the Database Service and Web Service
+Before you click Create Web Service, you must connect the Postgres service so your Flask app can read and write data to the Postgres database. To connect the services, you can copy the Postgres database URL and paste it into the environment variables within the web service
+
+#### Copy Postgres Database URL
+From the Postgres service (name: "postgres-deployment-example"), click the "Info" side navigation and copy the Internal Database URL from the Connections page.
+
+
+![8a-copy-db-url.png](figs/8a-copy-db-url.png)
+
+#### Paste the Database URL in the Web Service Environment Variable
+From the web service (name: render-deployment-example), create an environment variable with the key: DATABASE_URL and value: the Database URL value copied from the Postgres service..
+
+![8b-paste-env-var.png](figs/8b-paste-env-var.png)
+
+
+_Note: The Flask app will use the second environment variable ("EXCITED: true"). You can store any other credentials for your apps by adding the environment variables._
+
+After the Web Service is ready, you can open your Flask app on the browser by clicking the app URL under the title on the Web Service page.
+
+![9-create-web-service.png](figs/9-create-web-service.png)
+
+Check that your app is running! It should show the message
+
+```
+Hello!!!!! You are doing great in this Udacity project.
+```
+
+![101-root.png](figs/101-root.png)
+
+Now navigate to the coolkids page. You should see this message:
+
+```
+Be cool, man, be coooool! You're almost a FSND grad!
+```
+
+![102-coolkids.png](figs/102-coolkids.png)
+
+Congratulations! You have deployed the sample app on the Render Cloud platform.
+
+> ⚠️ After you complete this exercise, please suspend or delete the services to avoid any charges.
+
+
+
