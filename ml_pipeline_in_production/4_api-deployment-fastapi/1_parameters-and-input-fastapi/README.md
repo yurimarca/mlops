@@ -19,8 +19,11 @@ This file contains a FastAPI application that defines a POST endpoint. The endpo
 uvicorn bar:app --reload
 ```
 
-- The --reload flag ensures the server automatically reloads if you make changes to the code.
-- By default, the app will be accessible at http://127.0.0.1:8000.
+- The `--reload` flag ensures the server automatically reloads if you make changes to the code.
+- By default, the app will be accessible at `http://127.0.0.1:8000`.
+- It is possible to check the auto documentation of fastAPI at `http://127.0.0.1:8000/docs`
+
+![api-docs](api-docs.png)
 
 ### POST request:
 
@@ -49,8 +52,8 @@ It verifies whether the API behaves as expected.
 
 - TestClient(app) allows us to send requests without starting a real server.
 - Test Function:
-    - Creates test data ({"value": 10}).
-    - Sends a POST request to /42?query=5.
+    - Creates test data `{"value": 10}`.
+    - Sends a POST request to `/42?query=5`.
     - Asserts that the response contains the correct path, query, and body.
 
 ```sh
