@@ -170,6 +170,42 @@ To run this we use the command `uvicorn main:app --reload`. This launches a loca
 
 In `sample_request.py` we see part of that functionality at work. A post request is made to the local host where our API is running. This post reqest contains a JSON object which is a Hitchhking Kit that has the tags of book and towel, and, surprising to fans of Douglas Adams, it has an `item_id` of 23. To send this post request to our running server use `python sample_request.py` while the server is running.
 
+## Local API Testing
+
+As we saw previously, running FastAPI locally is straightforward: `uvicorn main:app --reload`. However, this is clunky and likely impossible if we want to run our tests automatically in our Continuous Integration framework.
+
+#### Test APIs with PyTest
+
+Before you deploy your APIs to production, you should create and pass all the unit tests. To do so, create a new Python file in the App folder, e.g., test_main.py, and use FastAPI's built-in testing framework by importing TestClient.
+
+```py
+from fastapi.testclient import TestClient
+
+# Import our app from main.py.
+from main import app
+
+# Instantiate the testing client with our app.
+client = TestClient(app)
+
+# Write tests using the same syntax as with the requests module.
+def test_api_locally_get_root():
+    r = client.get("/")
+    assert r.status_code == 200
+```
+
+Next, run this command to run the unit tests with PyTest
+
+```sh
+python -m pytest test_main.py
+```
+
+![test-main](figs/test-main.png)
+
+
+#### Further Reading
+FastAPI's [tutorial](https://fastapi.tiangolo.com/tutorial/testing/) on local testing.
+
+
 
 
 
