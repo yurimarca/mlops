@@ -207,5 +207,21 @@ FastAPI's [tutorial](https://fastapi.tiangolo.com/tutorial/testing/) on local te
 
 
 
+## Heroku Fundamentals
+
+In the previous lesson we covered a few fundamentals of Heroku such as dynos, slugs, and the `Procfile`. Now we will put those fundamentals to work in deploying a web app to Heroku.
+
+Heroku operates on a handful of key principles, a few of which we discuss here. We already touched on dynos which are virtualized containers used for running discrete processes. This connects directly to statelessness. Heroku does not store or cache any of your data. If you want to save anything then you must connect your app some form of external storage. Likewise, processes are seen as disposable. They can be started or stopped at any time. This is what allows rapid iteration, fault tolerance, and scalability with Heroku.
+
+Heroku's last principle which is the undercurrent throughout everything we have discussed is that of "build, release, run". Heroku breaks the app life-cycle into three discrete stages. Whenever we interact with Heroku we are interacting with one of these discrete stages.
+
+And finally, the `Procfile` previously shown was missing a few crucial pieces to get it to function on Heroku. The full file is:
+
+```sh
+web: uvicorn main:app --host=0.0.0.0 --port=${PORT:-5000}
+```
+
+Previously when we locally deployed our app it automatically used 127.0.0.1 which is the localhost. Here we use 0.0.0.0 which is the IP used to tell a server to listen on every open network interface. Heroku dynamically assigns the port to the `PORT` variable. In Unix `${VARIABLE:-default}` is used to assign a default if `VARIABLE` is not set, so here we set the port CLI option to PORT and failing that set it to 5000.
+
 
 
