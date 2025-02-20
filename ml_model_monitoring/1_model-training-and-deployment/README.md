@@ -155,35 +155,53 @@ Every cron job needs to specify how frequently the job should be run. If you spe
 
 ### Demo: Cron Job
 
-You can open your workspace and make sure that the cron service is running as follows:
+Here’s the Fedora equivalent of your cron job demo:
 
-```
-service cron start
+---
+
+### **Fedora Demo: Cron Job**
+You can open your workspace and ensure that the cron service is running by using the following command:
+
+```sh
+sudo systemctl start crond
 ```
 
-Next, you can open your machine's crontab:
+To ensure that the service runs on startup, enable it:
 
+```sh
+sudo systemctl enable crond
 ```
+
+Next, open your machine's crontab:
+
+```sh
 crontab -e
 ```
 
-After the crontab is open, you can add cron jobs to it. Each cron job is exactly one line long.
+After opening the crontab, you can add cron jobs. Each cron job is exactly one line long.
 
-The following cron job will run every minute of every day:
+#### **Example Cron Jobs**
 
-```
- ***  * * python /home/workspace/L2/demo1/crondemo.py
-```
-The following cron job will run at 12:59 on January 5, just once per year:
+The following cron job will run **every minute of every day**:
 
+```sh
+* * * * * python /home/workspace/L2/demo1/crondemo.py
 ```
+
+The following cron job will run **at 12:59 on January 5, just once per year**:
+
+```sh
 59 12 5 1 * python /home/workspace/L2/demo1/crondemo.py
 ```
 
-The following cron job will run on Fridays, once per hour at 59 minutes past every hour:
+The following cron job will run **on Fridays, once per hour at 59 minutes past every hour**:
 
+```sh
+59 * * * 5 python /home/workspace/L2/demo1/crondemo.py
 ```
-59  ***   5 python /home/workspace/L2/demo1/crondemo.py
+
+If you want to stop it:
+
+```sh
+sudo systemctl stop crond
 ```
-
-
