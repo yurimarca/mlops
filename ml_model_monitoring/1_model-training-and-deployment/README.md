@@ -205,3 +205,80 @@ If you want to stop it:
 ```sh
 sudo systemctl stop crond
 ```
+
+## Automated Model Re-training And Deployment
+
+Re-training and re-deployment are important parts of every ML project. Take a look at the image below, showing a map of a full ML project. It shows data ingestion in the top left - this is something we did in the first part of this lesson. Training and deployment are shown in the middle of the top row - they're the steps we want to talk about now.
+
+![a map of a full ML project, including the DevOps portion (ingestion, training, deployment, scoring, monitoring)](figures/model-training.png)
+
+We accomplish training just after ingestion. Training requires you to know the location of ingested training data, create an ML model, and fit the model using the training data.
+
+After training, you can accomplish deployment. Often, deployment is a simple process, that requires saving a trained model to a production environment.
+
+![](figures/training.png)
+
+*Remember*: every part of the training and deployment process can be automated by using cron jobs.
+
+### Demo: Model Re-training And Deployment
+
+Start by importing relevant modules:
+
+```
+import pickle
+import pandas as pd
+from sklearn.linear_model import LogisticRegression
+import os
+```
+
+You need to open the file that contains the name of the deployed model:
+
+```
+with open('deployedmodelname.txt', 'r') as f:
+    deployedname = f.read()
+print(deployedname)
+```
+
+You also need to open the file that contains the location of the demo data:
+
+```
+with open('demodatalocation.txt', 'r') as f:
+    datalocation = f.read()
+print(datalocation)
+```
+
+Next, read the training data, and separate it into X and y variables:
+
+```
+trainingdata = pd.read_csv(os.getcwd() + datalocation)
+X = trainingdata.loc[:,['bed','bath']].values.reshape(-1, 2)
+y = trainingdata['highprice'].values.reshape(-1, 1).ravel()
+```
+
+Create a logistic regression model, and train it using our training data:
+
+```
+logit = LogisticRegression(C=1.0, 
+                           class_weight=None, 
+                           dual=False, 
+                           fit_intercept=True, 
+                           intercept_scaling=1, 
+                           l1_ratio=None, 
+                           max_iter=100,
+                           multi_class='auto', 
+                           n_jobs=None, 
+                           penalty='l2',
+                           random_state=0, 
+                           solver='liblinear', 
+                           tol=0.0001, 
+                           verbose=0,
+                           warm_start=False)
+model = logit.fit(X, y)
+```
+
+Finally, save the pickle file to your workspace:
+
+```
+pickle.dump(model, open('./production/' + deployedname, 'wb'))
+```
+
