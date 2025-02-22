@@ -244,7 +244,40 @@ print(thirdtest)
 ```
 
 
+## Hyphotesis Testing
+
+You may find a need to compare two different models that both have their own sets of historic model scores. In this case, you can use a statistical method called hypothesis testing.
+
+In order to accomplish hypothesis testing, you need to read both sets of previous scores into Python. Then you need to perform a "*t-test*" on the two sets of scores.
+
+The "*t-test*" will provide a value called a "*p-value*". If the size of the p-value is relatively small, we take that as evidence that the two sets of model scores are different. It's common to use 0.05 as a threshold: if the p-value is less than this threshold, then we consider that to be sufficient evidence that the model scores are different. When p<0.05, we say that the difference between the scores is "statistically significant."
 
 
+# Lesson Review
 
+In this lesson, we learned how to score models and check for model drift. We covered all of the following topics:
+
+- **Automatic model scoring**: how to read data and score models automatically
+- **Recording model scores**: how to keep persistent records of model scores in your workspace
+- **Model drift**: how to perform several different tests to check for model drift
+- **Hypothesis testing**: how to use statistical tests to compare two different models
+
+These skills are very important for all ML projects. By scoring models, you can ensure that they're up-to-date, and as accurate as possible.
+
+![](figures/lesson-review.png)
+
+# Glossary
+
+- **F1 score**: a common metric for measuring classification accuracy (higher scores are better).
+- **reshape()**: a method for changing the shape of data to prepare it for ML predictions.
+- **r-squared:** a metric used to measure model performance for regressions (between 0 and 1, the higher the better)
+- **sum of squared errors (SSE): a metric used to measure model performance for - **egressions:** (0 or higher, the lower the better)
+- **raw comparison test:** a test for model drift that consists of checking whether a new model score is worse than all previous scores
+- **parametric significance test:** a test model drift that consists of checking whether a new model score is more than 2 standard deviations worse than the mean of all previous scores
+- **non-parametric outlier test:** a test for model drift that consists of checking whether a new score is more than 1.5 interquartile ranges worse than the 25th or 75th percentile of previous scores
+- **standard deviation:** a measure of how far spread apart the observations in a dataset are
+- **interquartile range:** the difference between the 75th percentile and the 25th percentile of a set of observations
+- **p-value:** a numerical result from a t-test used to determine whether two sets of numbers differ
+- **t-test:** a statistical test for comparing two sets of numbers
+statistical significance: a concept describing the degree of evidence that two sets differ
 
