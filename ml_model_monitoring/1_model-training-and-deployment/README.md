@@ -326,3 +326,22 @@ This lesson was concerned with data ingestion and model training and deployment.
 These skills are important for every ML project. It's crucial to be able to ingest new data that your model needs. It's just as crucial to retrain and re-deploy your model regularly to keep it up-to-date. Being able to keep records about processes and automate them will also be important throughout the rest of the course.
 
 ![](figures/review.png)
+
+
+# Glossary
+For your reference, here are all the new terms we introduced in this lesson:
+
+- **os**: a module you can use to access workspace directories and files from a Python script
+- **ingestion**: the process of finding, gathering, recording, cleaning, and providing data as input to an ML project.
+- **timestamp**: a character string recording a particular date and time
+- **datetime**: a module containing capabilities for recording timestamps
+- **crontab**: the file on a Linux machine that contains cron jobs
+- **cron job**: a one-line code snippet that schedules a particular task
+- **pickle**: the module used to read and write trained ML models
+- **logistic regression**: an ML method used for categorical (0-1) classifications
+- **re-deployment**: the process of overwriting a deployed ML model with a newer, improved version
+- **`dump()`**: the method in the pickle module used to save a trained ML model
+- **`merge()`**: a method for combining two datasets - also including an option to record which entries are unique to particular datasets, and which are common across both
+- **distributed file system**: a collection of machines that allow data to be spread across multiple locations, to make work with extremely large datasets more feasible
+- **client/server model**: a hierarchical model allowing one machine to perform executive functions and control others, for more efficient data processing
+- **MapReduce**: a framework for performing operations on distributed datasets
