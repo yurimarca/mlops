@@ -92,3 +92,76 @@ f1score = metrics.f1_score(predicted,y)
 print(f1score)
 ```
 
+## Recording Model Scores
+
+Recording model scores is a straightforward process:
+
+First, read historical records into your Python session.
+Next, perform model scoring, as we went over earlier in this lesson. Make sure the score you calculate is the same type of score as the scores in your historical records. Also, make sure you use the most recently deployed ML model to calculate scores.
+Finally, write a record of all previous and current scores to your workspace.
+The following diagram shows the whole process.
+
+
+![A diagram showing the process of recording model scores, including reading historical scores, performing scoring, and writing scores again to the workspace](figures/recording-model-scores.png)
+
+### Demo: Recording Model Scores
+
+Start by importing relevant modules:
+
+```
+import ast
+import pandas as pd
+import numpy as np
+```
+
+Define some hypothetical model scores:
+
+```
+recent_r2 = 0.55
+recent_sse = 49999
+```
+
+Read a dataframe containing recent model scores:
+
+```
+previousscores = pd.read_csv('previousscores_l3demo.csv')
+```
+
+Find the maximum version number recorded in the dataframe of previous scores:
+
+```
+maxversion=previousscores['version'].max()
+```
+
+Define the new version number 1 greater than the previous version number:
+
+```
+thisversion = maxversion + 1
+```
+
+Create new rows that you'll use to append the newest model scores to the dataframe of previous model scores:
+
+```
+new_rows = pd.DataFrame([
+    {'metric': 'r2', 'version': thisversion, 'score': recent_r2},
+    {'metric': 'sse', 'version': thisversion, 'score': recent_sse}
+])
+```
+
+Append the newest model scores to the historical records. However, only append the scores if the new r-squared score is higher than all previous r-squared scores:
+
+```
+if recent_r2 > previousscores.loc[previousscores['metric'] == 'r2', 'score'].max():
+    previousscores = pd.concat([previousscores, new_rows], ignore_index=True)
+```
+
+Finally, write all scores to your workspace:
+
+```
+previousscores.to_csv('newscores.csv')
+```
+
+
+
+
+
