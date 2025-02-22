@@ -162,6 +162,89 @@ previousscores.to_csv('newscores.csv')
 ```
 
 
+## Model Drift
+
+The term "model drift" refers to a model's performance getting worse over time. To test for model drift, we have to compare current model performance to previous model performance.
+
+### Raw Comparison Test
+
+The simplest way to compare performance is a "raw comparison": we simply check whether current performance is worse than all previous scores. if the current performance score is worse than all previous scores, then we say that model drift has occurred - according to the raw comparison test.
+
+![](figures/raw-comparison-test.png)
+
+### Parametric Significance Test
+
+In some cases, the raw comparison test is too sensitive, it will tell us that model drift occurred even in cases where the newest model is only very slightly worse than previous models.
+
+In order to avoid this sensitivity, we can try a different test: the "parametric significance test." This test will check the standard deviation of all previous scores. Then, it will conclude that a new model has worse performance than previous models if the new model score is more than two standard deviations lower than the mean of all the previous scores.
+
+You can see an illustration of the parametric significance test in the figure below.
+
+![](figures/parametric-test.png)
+
+A plot showing the parametric significance test: by checking whether the new score is more than two standard deviations from the mean of previous scores, the parametric significance test is meant to look for extreme values in a bell curve.
+
+### Non-Parametric Outlier Test
+
+The parametric significance test relies on the standard deviation of previous scores. In some cases, the standard deviation can lead to misleading conclusions. This can be especially true if your data isn't distributed like a bell curve, or if it has many outliers.
+
+In cases where we don't want to use the parametric significance test, we can use another, similar test called the "non-parametric outlier test." Instead of the standard deviation, this test uses the interquartile range: the difference between the 75th percentile and the 25th percentile. A model score is regarded as an extreme value if it is either:
+
+- more than 1.5 interquartile ranges above the 75th percentile (a high outlier)
+- more than 1.5 interquartile ranges below the 25th percentile (a low outlier)
+
+If a model score is worse than previous scores to an extent that it's an outlier (either a high or low outlier), then the non-parametric outlier test concludes that model drift has occurred.
+
+
+![](figures/non-parametric-test.png)
+
+
+### Demo: Checking for Model Drift
+
+Start by importing the modules you'll need:
+
+```
+import ast
+import numpy as np
+```
+
+Define a hypothetical new F1 score:
+
+```
+newf1 = 0.38
+```
+
+Open a list of previous scores, using the ast module:
+
+```
+with open('previousscores_l3demo.txt', 'r') as f:
+    f1list = ast.literal_eval(f.read())
+```
+
+Perform the raw comparison test by checking whether the new score is worse than all previous scores:
+
+```
+firsttest = newf1 < np.min(f1list)
+print(firsttest)
+```
+
+Perform the parametric significance test by checking whether the new score is more than 2 standard deviations lower than the mean of the previous scores:
+
+```
+secondtest = newf1 < np.mean(f1list)-2*np.std(f1list)
+print(secondtest)
+```
+
+Perform the non-parametric outlier test by checking whether the new score is more than 1.5 interquartile ranges lower than the 25th percentile of the previous scores:
+
+```
+iqr = np.quantile(f1list, 0.75)-np.quantile(f1list, 0.25)
+thirdtest = newf1 < np.quantile(f1list, 0.25)-iqr*1.5
+print(thirdtest)
+```
+
+
+
 
 
 
