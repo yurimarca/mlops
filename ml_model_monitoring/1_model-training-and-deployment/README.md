@@ -282,3 +282,47 @@ Finally, save the pickle file to your workspace:
 pickle.dump(model, open('./production/' + deployedname, 'wb'))
 ```
 
+## Data Comparisons and Big Data
+
+Sometimes, when you're ingesting data from multiple sources, you want to do comparisons between the datasets, to find out which rows are shared in common between both datasets, and which rows are unique.
+
+Sometimes, like in the image below, you can accomplish this comparison just by looking at the two datasets for a few seconds:
+
+![Two small datasets, that can be compared merely by looking for a few seconds to check which rows are common to both](figures/compare2.png)
+
+For bigger datasets, it won't be practical to visually inspect every row. Instead, we want a code solution.
+
+If you have two datasets, called df1 and df2, you can use this line of code to accomplish the comparison:
+
+```
+df_all = df1.merge(df2.drop_duplicates(),
+                   on=['col1','col2'],
+                   how='outer', 
+                   indicator=True)
+```
+
+This will merge the two datasets together, and also create a new column called `_merge`, which will indicate whether each row is common to both datasets, or unique to only one.
+
+
+### Edge Case - Big data
+
+There are some special ways to work with extremely large datasets. Instead of ingesting them to a single file or even a single machine, we can split them into multiple sections, and save each section to a different machine. A system that spreads single datasets across multiple machines is called a **distributed file system**.
+
+A typical distributed file system uses a model called a **client/server model**, illustrated in this image:
+
+![The client/server model: a client makes assignments to multiple servers, requiring them to store portions of datasets or run scripts](figures/clientserver.png)
+
+After you split the data into several different parts and spread them across separate servers, you can use special techniques to perform calculations or operations. One of the most common methods for performing operations on distributed file systems is called MapReduce. MapReduce provides a framework for working with data on individual nodes and then combining the results. If you work with very large datasets, you should familiarize yourself with methods like these for working with distributed file systems.
+
+# Lesson Review
+
+This lesson was concerned with data ingestion and model training and deployment. In this lesson, we learned how to:
+
+- automatically ingest data, for use in the model, and for model training
+- keep records related to ML processes, including data ingestion
+- automate ML processes using cron jobs
+- retrain and re-deploy ML models
+
+These skills are important for every ML project. It's crucial to be able to ingest new data that your model needs. It's just as crucial to retrain and re-deploy your model regularly to keep it up-to-date. Being able to keep records about processes and automate them will also be important throughout the rest of the course.
+
+![](figures/review.png)
