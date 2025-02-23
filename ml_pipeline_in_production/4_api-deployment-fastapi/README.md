@@ -206,22 +206,58 @@ python -m pytest test_main.py
 FastAPI's [tutorial](https://fastapi.tiangolo.com/tutorial/testing/) on local testing.
 
 
+## Input Data Validation
 
-## Heroku Fundamentals
+For our machine learning model API to perform its best, we want to ensure that any data the user sends passes certain requirements. By doing so, we can help protect the users from receiving bogus results from nonsensical inputs, typos, or other errors.
 
-In the previous lesson we covered a few fundamentals of Heroku such as dynos, slugs, and the `Procfile`. Now we will put those fundamentals to work in deploying a web app to Heroku.
+### Pydantic Validator
+An elegant way to do this is using Pydantic's built in data validation. We started to get a taste of this by seeing how Pydantic uses Python's type system to coerce an input into, e.g., `int` or `str`, but we can go a step further to validate these.
 
-Heroku operates on a handful of key principles, a few of which we discuss here. We already touched on dynos which are virtualized containers used for running discrete processes. This connects directly to statelessness. Heroku does not store or cache any of your data. If you want to save anything then you must connect your app some form of external storage. Likewise, processes are seen as disposable. They can be started or stopped at any time. This is what allows rapid iteration, fault tolerance, and scalability with Heroku.
+In the `Field` object you can specify different restrictions. For numeric values you may want to use `lt` or `gt` for less than and greater than. For example, if one of your inputs is age we would expect `gt=0` and `lt=122` (the age of the oldest ever living person). We can also validate string objects using arguments like `min_length`, `max_length`, and `regex`.
 
-Heroku's last principle which is the undercurrent throughout everything we have discussed is that of "build, release, run". Heroku breaks the app life-cycle into three discrete stages. Whenever we interact with Heroku we are interacting with one of these discrete stages.
+One can go a step further and write custom validators using Pydantics `validator` decorator, e.g.,
 
-And finally, the `Procfile` previously shown was missing a few crucial pieces to get it to function on Heroku. The full file is:
+```
+from enum import Enum
+from pydantic import BaseModel, validator
 
-```sh
-web: uvicorn main:app --host=0.0.0.0 --port=${PORT:-5000}
+
+class Profession(str, Enum):
+   DS = "data scientist"
+   MLE = "machine learning scientist"
+   RS = "research scientist"
+
+class NewHire(BaseModel):
+    profession: Profession
+    name: str
+    
+    @validator('name')
+    def name_must_contain_space(cls, v):
+        if ' ' not in v:
+            raise ValueError('Name must contain a space for first and last name.')
+        return v
+
 ```
 
-Previously when we locally deployed our app it automatically used 127.0.0.1 which is the localhost. Here we use 0.0.0.0 which is the IP used to tell a server to listen on every open network interface. Heroku dynamically assigns the port to the `PORT` variable. In Unix `${VARIABLE:-default}` is used to assign a default if `VARIABLE` is not set, so here we set the port CLI option to PORT and failing that set it to 5000.
+In this example, we have a simple model for a new hire with two attributes. The first corresponds to a profession which we want to limit to a short list using `enum` from Python's standard library. The second is a `startdate` that we expect to be in the current year.
+
+If you want to test this code, copy it into a REPL and try out the following lines:
+
+```
+NewHire(profession="data scientist", name="Justin Smith")
+NewHire(profession="data scientist", name="Justin Smith")
+NewHire(profession="data scientist", name="Justin")
+```
+
+### Pydantic Types
+Lastly, Pydantic provides types beyond Python's basic built-in types. While not all of these may be useful in a machine learning context, such as EmailStr which validates an email address, they may still prove incredibly handy in the right use case.
+
+#### Further reading
+[Pydantic's documentation](https://docs.pydantic.dev/latest/concepts/validators/) on validators.
+
+[Pydantic's details](https://docs.pydantic.dev/latest/concepts/json_schema/#field-customization) on customizing Field objects.
+
+And lastly, [Pydantic's list](https://docs.pydantic.dev/latest/concepts/types/#pydantic-types) of all the custom types.
 
 
 
