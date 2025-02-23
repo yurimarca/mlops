@@ -271,7 +271,7 @@ These skills are very important for all ML projects. By scoring models, you can 
 - **F1 score**: a common metric for measuring classification accuracy (higher scores are better).
 - **reshape()**: a method for changing the shape of data to prepare it for ML predictions.
 - **r-squared:** a metric used to measure model performance for regressions (between 0 and 1, the higher the better)
-- **sum of squared errors (SSE): a metric used to measure model performance for - **egressions:** (0 or higher, the lower the better)
+- **sum of squared errors (SSE):** a metric used to measure model performance for - **egressions:** (0 or higher, the lower the better)
 - **raw comparison test:** a test for model drift that consists of checking whether a new model score is worse than all previous scores
 - **parametric significance test:** a test model drift that consists of checking whether a new model score is more than 2 standard deviations worse than the mean of all previous scores
 - **non-parametric outlier test:** a test for model drift that consists of checking whether a new score is more than 1.5 interquartile ranges worse than the 25th or 75th percentile of previous scores
