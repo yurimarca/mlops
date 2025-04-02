@@ -2,10 +2,6 @@ Speed is not only something that helps us finish work on time, it's also a natur
 
 In this exercise, we provided you a python script called `timings.py` in `/L4/` directory. You will write functions in this script that help you record and monitor the speed of important ML pipeline processes.
 
-### Environment setup
-
-You'll use a Workspace that's available below for this exercise.
-
 ## Instructions
 
 First, make sure you're familiar with the scripts whose timing we'll be measuring. We'll be monitoring the timing of two ML scripts:

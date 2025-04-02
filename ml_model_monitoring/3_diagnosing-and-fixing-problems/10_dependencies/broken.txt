@@ -1,0 +1,1 @@
+ydata-profiling 4.16.1 has requirement pydantic>=2, but you have pydantic 1.10.21.
