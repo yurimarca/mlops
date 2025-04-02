@@ -188,8 +188,6 @@ Most Python scripts import and depend on 3rd-party modules. Some of the modules 
 - **NumPy** (used for scientific computation)
 - **Scikit-learn** (also called sklearn, used for machine learning)
 
-
-
 ![](figures/dependencies.png)
 
 **Watch out!** If your scripts are using modules that are outdated, your code might stop working, or it might not work in the right way.
@@ -204,8 +202,6 @@ We can use the software tool called **pip** to install and work with Python de
 - `pip show pandas`(provide specific information an installed module)
 - `pip install pandas` (installs modules)
 - `python -m pip list` (run pip through Python)
-
-
 
 ### Demo Summary
 
@@ -238,3 +234,30 @@ numpyinfo=subprocess.check_output(['python','-m','pip', 'show', 'numpy'])
 with open('numpy.txt', 'wb') as f: 
     f.write(numpyinfo)
 ```
+
+## Data Imputation
+
+Data imputation is a method that resolves data integrity issues. If you find missing entries in your data, **data imputation** provides a way to replace the missing entries with educated guesses about the true values.
+
+There are several ways to obtain educated guesses about the true values of missing data:
+
+- **zero imputation**: the simplest possible way to make guesses about data is to simply guess that all missing values are equal to zero. This is simple and easy, although it's rarely highly accurate.
+- **mean imputation**: you can take the means of every column of your data, and set every missing entry to be equal to the mean of the column where it appears.
+- **regression imputation**: you can use linear regression to predict the value of each missing data entry, and replace every missing entry with the regression prediction.
+
+In this lesson, we focus on **mean imputation**, because it's reasonably accurate, and also fairly straightforward to implement.
+
+
+
+## Summary
+
+This lesson was about diagnosing and resolving operational issues. In this lesson, you learned how to:
+
+- Time ML processes, and determine whether there are speed or latency issues
+- Check for integrity and stability issues in data
+- Check for dependencies, and resolve dependency issues
+- Perform data imputation: a method for resolving data integrity problems
+
+Now that you've mastered these topics, you'll be much better prepared for managing ML projects, regardless of what problems come up.
+
+![](figures/summary.png)
