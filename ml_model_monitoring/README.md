@@ -19,41 +19,44 @@ In short, ML Model Scoring and Monitoring is an important, continuous process th
 ![Outline](figures/course-outline.png)
 
 ### Lesson 1:
+
 In this lesson, we'll cover model training and deployment, including the following:
 
 - data ingestion
 - process record-keeping
 - automating ML processes
 - retraining and re-deploying ML models
-You'll be able to ingest data and retrain and re-deploy models by the end of this lesson.
+  You'll be able to ingest data and retrain and re-deploy models by the end of this lesson.
 
 ### Lesson 2:
+
 This lesson will cover the idea of model scoring and model drift, including the following:
 
 - automatically scoring ML models
 - recording model scores
 - checking for model drift
 - hypothesis testing in model comparisons
-After this lesson, you'll be able to check whether models need to be retrained and re-deployed.
+  After this lesson, you'll be able to check whether models need to be retrained and re-deployed.
 
 ### Lesson 3:
+
 This lesson will cover diagnosing and fixing operational problems, including the following:
 
 - timing processes and checking for latency issues
 - checking for and resolving module dependency issues
 - checking for and resolving data stability issues
-After this lesson, you'll be able to diagnose and resolve any operational issues that may come up in your projects.
+  After this lesson, you'll be able to diagnose and resolve any operational issues that may come up in your projects.
 
 ### Lesson 4:
+
 This lesson will cover model scoring and monitoring with API's, including the following:
 
 - configuring API's on your workspace
 - scripting endpoints to improve your API's
 - running and calling API's
-After this lesson, you'll be able to continuously monitor your ML projects using API's.
+  After this lesson, you'll be able to continuously monitor your ML projects using API's.
 
 ![Summary Figure](figures/lesson-review.png)
-
 
 ## History of ML Model Scoring and Monitoring
 
@@ -80,9 +83,7 @@ There are some exceptions when you won't need to use the ideas in this course. T
 - If your ML model only needs to be used one time
 - If you're working on ML theory rather than an applied model
 
-
 ## Stakeholders
-
 
 It's important to know who you'll be working with on your ML projects, and how you'll interact with them. In a typical ML Model Scoring and Monitoring project, you'll work with the following stakeholders:
 
@@ -92,7 +93,6 @@ It's important to know who you'll be working with on your ML projects, and how y
 - **Data Engineers** work closely with data. They may work with database administration, data ingestion, and feature engineering.
 
 ![stakeholders](figures/stakeholder.png)
-
 
 ## Project: A Dynamic Risk Assessment System
 
@@ -115,3 +115,15 @@ In addition to setting up the machine learning model for this project, you'll se
 ![project](figures/project2.png)
 
 
+
+# Course Recap
+
+This course has been about ML Model Scoring and Monitoring. We covered all of the following topics:
+
+- The idea of ML Model Scoring and Monitoring
+- Automated model training and deployment, including how to automate ML processes, and how to train models and deploy them to persistent storage
+- Model scoring and model drift, including the idea of model drift, the need to continually check model scores, how to test for model drift, and what to do when model drift is detected
+- Diagnosing and fixing operational issues, including how to check for and resolve operational problems like timing slowdowns, data integrity and stability issues, and broken dependencies
+- Model reporting and monitoring with API's, including how to set up and call API's, and how to use them to check for important information about your ML project
+
+![](figures/course-recap.png)
