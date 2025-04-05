@@ -94,8 +94,6 @@ app.run(host='0.0.0.0', port=8000)
 
 To run the app, you can run `python3 app.py` from the command line.
 
-
-
 ## Endpoint Scripting
 
 So far in this lesson, we've worked with very simple **API endpoints**. You should remember the endpoint we created in the solution to the previous exercise:
@@ -111,11 +109,7 @@ This endpoint contains a route (`'/'`) and a simple Python function. These are r
 
 API's with one simple endpoint can be useful. But it's often even more useful to have multiple, complex endpoints in an API. There's no limit to the number of endpoints an API can have, or what they can do. This part of the lesson is about how to create API's with multiple, complex endpoints, so they can be as useful as possible for your ML projects.
 
-
-
 ### Demo
-
-
 
 Start by reading relevant modules:
 
@@ -166,3 +160,59 @@ app.run(host='0.0.0.0', port=8000)
 ```
 
 
+
+## Calling API Endpoints
+
+API's are only useful if we call them. There are many kinds of API's, and several different ways to call them. In this lesson, we've created API's with the Flask module. Our Flask API's can be called in one of several different ways:
+
+- from the command line
+- from a Python script
+- using a hybrid method - calling the command line from a Python script
+
+We'll go over each of these methods for calling your API's.
+
+
+
+### Command Line Method
+
+You need to use the `curl` command to call API's from the terminal's command line. WHen you use curl, you need to specify 3 things to call an API:
+
+- **An IP address** or URL, like `127.0.0.1`. This IP address is called the **localhost** IP: it always accesses the current machine where your code is running.
+- **A port number**, like `8000`. This needs to be the same port that is mentioned in your app.py configuration file.
+- **A query string**: this is any string that you want to pass to your API to specify an endpoint and any argument your API endpoint needs
+
+The following is a valid API call from the command line:
+
+`curl 127.0.0.1:8000?user=brad`
+
+
+
+### Python Script Method
+
+
+
+You can also call your API's from within a Python script. Just like a command line API call, you need to specify three important things:
+
+- an IP address or URL, like `127.0.0.1`. This IP address is called the **localhost** IP: it always accesses the current machine where your code is running.
+- a port number, like 8000. This needs to be the same port that is mentioned in your app.py configuration file.
+- a query string: this is any string that you want to pass to your API to specify an endpoint and any argument your API endpoint needs
+
+The following is an example of calling an API from a Python script:
+
+`print(requests.get('http://127.0.0.1:8000?user=brad').content)`
+
+
+
+### Hybrid Method: Terminal Commands From Python Scripts
+
+Finally, you can use a hybrid method: calling the command line from within a Python script. Just like you needed in the previous methods, you'll need to specify all of these 3 things in your API call:
+
+- **An IP address** or URL, like `127.0.0.1`. This IP address is called the **localhost** IP: it always accesses the current machine where your code is running.
+- **A port number**, like `8000`. This needs to be the same port that is mentioned in your app.py configuration file.
+- **A query strin**g: this is any string that you want to pass to your API to specify an endpoint and any argument your API endpoint needs
+
+The following is an example line that calls the command line from within a terminal script:
+
+`response1=subprocess.run(['curl', '127.0.0.1:8000?user=brad'],capture_output=True).stdout`
+
+In all cases, you need to make sure that your API is running every time you call it.

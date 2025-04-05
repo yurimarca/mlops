@@ -24,8 +24,6 @@ Your endpoint needs a function, that you can call `size()`. This function shoul
 
 Finally, you need to add a return statement to your `size()` function. It should return the **number of rows** of the pandas DataFrame the function read.
 
-
-
 ## Instructions - Summary Endpoint
 
 Next, you can write a "summary" endpoint that enables users to check the summary statistics - in this case the mean of each column of a dataset.
