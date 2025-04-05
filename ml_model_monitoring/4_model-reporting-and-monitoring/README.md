@@ -159,8 +159,6 @@ Finally, run the app, specifying a hostname and a port:
 app.run(host='0.0.0.0', port=8000)
 ```
 
-
-
 ## Calling API Endpoints
 
 API's are only useful if we call them. There are many kinds of API's, and several different ways to call them. In this lesson, we've created API's with the Flask module. Our Flask API's can be called in one of several different ways:
@@ -170,8 +168,6 @@ API's are only useful if we call them. There are many kinds of API's, and severa
 - using a hybrid method - calling the command line from a Python script
 
 We'll go over each of these methods for calling your API's.
-
-
 
 ### Command Line Method
 
@@ -185,11 +181,7 @@ The following is a valid API call from the command line:
 
 `curl 127.0.0.1:8000?user=brad`
 
-
-
 ### Python Script Method
-
-
 
 You can also call your API's from within a Python script. Just like a command line API call, you need to specify three important things:
 
@@ -200,8 +192,6 @@ You can also call your API's from within a Python script. Just like a command li
 The following is an example of calling an API from a Python script:
 
 `print(requests.get('http://127.0.0.1:8000?user=brad').content)`
-
-
 
 ### Hybrid Method: Terminal Commands From Python Scripts
 
