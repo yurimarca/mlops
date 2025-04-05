@@ -206,3 +206,34 @@ The following is an example line that calls the command line from within a termi
 `response1=subprocess.run(['curl', '127.0.0.1:8000?user=brad'],capture_output=True).stdout`
 
 In all cases, you need to make sure that your API is running every time you call it.
+
+## Above and Beyond: Different API Protocols
+
+All of the API calls we've performed in this lesson have been a specific kind called "**GET requests**". GET requests are the simplest ways to call an API: they provide only a request to "get" some information. They're good for outputting information from the project to users.
+
+However, in many cases, you'll want to input information: allow users to post new data or other files for your project to use. In this case, a GET request usually won't work, and you'll want to use another type of API call, a "**POST request**".
+
+**GET** and **POST** are the two major types of API calls, and they're both referred to as API "methods".
+
+You can see an example of an endpoint that allows POST requests below.
+
+![](figures/api.png)
+
+#### New Terms
+
+- **method**: a standard procedure for calling an API in a particular way
+- **GET**: the default type of API call in Flask, used to obtain information from a project
+- **POST**: a type of API call used to upload information or files to a project
+
+
+
+## Lesson Review
+
+In this lesson, we learned how to perform model reporting and monitoring with API's. We covered the following topics:
+
+- **API configuration**: how to configure simple API's
+- **Endpoint scripting**: creating multiple, complex endpoints for API's
+- **Calling API's**: how to call API's in several ways
+- **Different API Methods**: different ways that API's can be called to provide or receive information or files
+
+These skills can help you as you're trying to regularly monitor and report about the performance of your ML project.
